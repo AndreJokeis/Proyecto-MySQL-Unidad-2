@@ -14,7 +14,7 @@ namespace Taller_Mecanico.Formularios
 {
     public partial class Refacciones : UserControl
     {
-        private RepostiorioRefaccion repostiorioRefaccion = new RepostiorioRefaccion();
+        private RepostiorioRefaccion repositorio= new RepostiorioRefaccion();
 
         private Refaccion refaccion;
 
@@ -50,49 +50,30 @@ namespace Taller_Mecanico.Formularios
 
                 if (registrar)
                 {
-                    if (repostiorioRefaccion.agregarRefaccion(refaccion) >= 1)
+                    if (repositorio.agregarRefaccion(refaccion) >= 1)
                     {
                         MessageBox.Show("La refaccion se agregó correctamente");
-                        txtNombre.Text = "";
-                        txtMarca.Text = "";
-                        txtPrecioUnitario.Text = "";
-                        nudStock.Text = "";
-                        nudStockMinimo.Text = "";
-                        txtProveedor.Text = "";
 
+                        limpiarCampos();
                         llenarLista();
-                        id = -1;
                     }
                     else
                     {
-                        MessageBox.Show("Ocurrió un error al agregar la refacción(" +
-                            repostiorioRefaccion.agregarRefaccion(refaccion) +
-                            ")\n" + refaccion);
+                        MessageBox.Show("Ocurrió un error al agregar la refacción");
                     }
                 } else
                 {
                     refaccion.idRefaccion = id;
-                    if (repostiorioRefaccion.actualizarRefaccion(refaccion) >= 1)
+                    if (repositorio.actualizarRefaccion(refaccion) >= 1)
                     {
                         MessageBox.Show("La refaccion se editó correctamente");
-                        txtNombre.Text = "";
-                        txtMarca.Text = "";
-                        txtPrecioUnitario.Text = "";
-                        nudStock.Text = "";
-                        nudStockMinimo.Text = "";
-                        txtProveedor.Text = "";
-
-                        btnRegistrar.Text = "Registrar";
-                        registrar = true;
-
+                        
+                        limpiarCampos();
                         llenarLista();
-                        id = -1;
                     }
                     else
                     {
-                        MessageBox.Show("Ocurrió un error al agregar la refacción(" +
-                            repostiorioRefaccion.agregarRefaccion(refaccion) +
-                            ")\n" + refaccion);
+                        MessageBox.Show("Ocurrió un error al agregar la refacción");
                     }
                 }
             }
@@ -107,7 +88,7 @@ namespace Taller_Mecanico.Formularios
         private void llenarLista()
         {
             dgvLista.DataSource = null;
-            dgvLista.DataSource = repostiorioRefaccion.ObtenerRefacciones();
+            dgvLista.DataSource = repositorio.ObtenerRefacciones();
         }
 
         private void limpiarCampos()
@@ -118,6 +99,11 @@ namespace Taller_Mecanico.Formularios
             nudStock.Text = "";
             nudStockMinimo.Text = "";
             txtProveedor.Text = "";
+
+            id = -1;
+            btnRegistrar.Text = "Registrar";
+            registrar = true;
+            btnBorrar.Enabled = false;
         }
 
         private void dgvLista_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -143,8 +129,6 @@ namespace Taller_Mecanico.Formularios
             DataGridViewRow fila = dgvLista.Rows[e.RowIndex];
             id = int.Parse(fila.Cells[0].Value.ToString());
 
-            MessageBox.Show("" + id);
-
             btnBorrar.Enabled = true;
 
         }
@@ -158,11 +142,9 @@ namespace Taller_Mecanico.Formularios
         {
             if (id >= 0)
             {
-                if (repostiorioRefaccion.borrarRefaccion(id) >= 1)
+                if (repositorio.borrarRefaccion(id) >= 1)
                 {
                     MessageBox.Show("La refacción se eliminó correctamente");
-                    btnBorrar.Enabled = false;
-                    id = -1;
                     llenarLista();
                     limpiarCampos();
                 }
