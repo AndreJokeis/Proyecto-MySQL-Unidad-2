@@ -107,6 +107,7 @@
             this.txtPrecioUnitario.Name = "txtPrecioUnitario";
             this.txtPrecioUnitario.Size = new System.Drawing.Size(370, 39);
             this.txtPrecioUnitario.TabIndex = 6;
+            this.txtPrecioUnitario.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPrecioUnitario_KeyPress);
             // 
             // label3
             // 

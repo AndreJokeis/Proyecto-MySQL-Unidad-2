@@ -12,7 +12,11 @@ namespace Taller_Mecanico.Servicios
     {
         public static string cadena = ConfigurationManager.ConnectionStrings["cadena_conexion"].ToString();
 
-
+        /// <summary>
+        /// Este método se encarga de obtener la conexión y establecerla con la BD
+        /// </summary>
+        /// <returns>Regresa la conexión ya establecida</returns>
+        /// <exception cref="Exception"></exception>
         public MySqlConnection ObtenerConexion()
         {
             MySqlConnection conexion = new MySqlConnection(cadena);
@@ -32,13 +36,5 @@ namespace Taller_Mecanico.Servicios
             return conexion;
         }
 
-
-        public void CerrarConexion(MySqlConnection conexion)
-        {
-            if (conexion != null && conexion.State == System.Data.ConnectionState.Open)
-            {
-                conexion.Close();
-            }
-        }
     }
 }

@@ -11,6 +11,11 @@ namespace Taller_Mecanico.Servicios
 {
     public class RepositorioServicio
     {
+        /// <summary>
+        /// Este método hace uso de un procedimiento almacenado en MySQL para buscar todas las refacciones en la tabla
+        /// de Servicios.
+        /// </summary>
+        /// <returns>Regresa un <c>List<Servicio></c> con la lista de todas los Servicios</returns>
         public List<Servicio> ObtenerServicios()
         {
             List<Servicio> listaServicios = new List<Servicio>();
@@ -45,6 +50,11 @@ namespace Taller_Mecanico.Servicios
             }
         }
 
+        /// <summary>
+        /// Este método hace uso de un procedimiento almacenado que agrega un Servicio en la tabla de la BD
+        /// </summary>
+        /// <param name="servicio">Recibe un objeto <c>Servicio</c></param>
+        /// <returns>Regresa un <c>int</c> con la cantidad de filas modificadas</returns>
         public int agregarServicio(Servicio servicio)
         {
             using (MySqlConnection connection = new SQL().ObtenerConexion())
@@ -69,6 +79,11 @@ namespace Taller_Mecanico.Servicios
             }
         }
 
+        /// <summary>
+        /// Este método se encarga de actualizar los datos de un servicio ya existente.
+        /// </summary>
+        /// <param name="servicio">Recibe el objeto ya existente que se desea modificar</param>
+        /// <returns>Regresa un <c>int</c> con la cantidad de filas modificadas</returns>
         public int actualizarServicio(Servicio servicio)
         {
             using (MySqlConnection connection = new SQL().ObtenerConexion())
@@ -94,6 +109,12 @@ namespace Taller_Mecanico.Servicios
                 }
             }
         }
+
+        /// <summary>
+        /// Esté método se encarga de borrar físicamente un servicio en la BD
+        /// </summary>
+        /// <param name="id">Recibe en id del Servicio a borrar</param>
+        /// <returns>Regresa un <c>int</c> con la cantidad de filas modificadas</returns>
         public int borrarServicio(int id)
         {
             using (MySqlConnection connection = new SQL().ObtenerConexion())

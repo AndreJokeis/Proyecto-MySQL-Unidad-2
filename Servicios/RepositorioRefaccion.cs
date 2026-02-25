@@ -12,6 +12,12 @@ namespace Taller_Mecanico.Objetos
 {
     public class RepostiorioRefaccion
     {
+
+        /// <summary>
+        /// Este método hace uso de un procedimiento almacenado en MySQL el cual busca una refacción por id.
+        /// </summary>
+        /// <param name="id">ID de la refacción a buscar</param>
+        /// <returns>Objeto <c>refacción</c> que se desea</returns>
         public Refaccion obtenerRefaccion(int id)
         {
             using (MySqlConnection connection = new SQL().ObtenerConexion())
@@ -54,6 +60,11 @@ namespace Taller_Mecanico.Objetos
             }
         }
 
+        /// <summary>
+        /// Este método hace uso de un procedimiento almacenado en MySQL para buscar todas las refacciones en la tabla
+        /// de refacciones
+        /// </summary>
+        /// <returns>Regresa un <c>List<Refaccion></c> con la lista de todas las refacciones</returns>
         public List<Refaccion> ObtenerRefacciones()
         {
             List<Refaccion> listaRefacciones = new List<Refaccion>();
@@ -90,6 +101,12 @@ namespace Taller_Mecanico.Objetos
             }
         }
 
+
+        /// <summary>
+        /// Este método hace uso de un procedimiento almacenado que agrega una Refacción en la tabla de la BD
+        /// </summary>
+        /// <param name="refaccion">Recibe un objeto <c>Refacción</c></param>
+        /// <returns>Regresa un <c>int</c> con la cantidad de filas modificadas</returns>
         public int agregarRefaccion(Refaccion refaccion)
         {
             using (MySqlConnection connection = new SQL().ObtenerConexion())
@@ -117,6 +134,11 @@ namespace Taller_Mecanico.Objetos
             }
         }
 
+        /// <summary>
+        /// Este método se encarga de actualizar los datos de una refacción ya existente
+        /// </summary>
+        /// <param name="refaccion">Recibe el objeto ya existente que se desea modificar</param>
+        /// <returns>Regresa un <c>int</c> con la cantidad de filas modificadas</returns>
         public int actualizarRefaccion(Refaccion refaccion)
         {
             using (MySqlConnection connection = new SQL().ObtenerConexion())
@@ -144,6 +166,12 @@ namespace Taller_Mecanico.Objetos
                 }
             }
         }
+
+        /// <summary>
+        /// Esté método se encarga de borrar físicamente una refacción en la BD
+        /// </summary>
+        /// <param name="id">Recibe en id de la Refafacción a borrar</param>
+        /// <returns>Regresa un <c>int</c> con la cantidad de filas modificadas</returns>
         public int borrarRefaccion(int id)
         {
             using (MySqlConnection connection = new SQL().ObtenerConexion())

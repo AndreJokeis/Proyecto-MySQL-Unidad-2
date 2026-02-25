@@ -45,6 +45,22 @@ namespace Taller_Mecanico.Formularios
             btnBorrar.Enabled = false;
         }
 
+        private bool punto(string s)
+        {
+            int count = 0;
+
+            foreach (char c in s)
+            {
+                if (c == '.')
+                    if (count < 1)
+                        count++;
+                    else
+                        return false;
+            }
+
+            return true;
+        }
+
         private void Servicios_Load(object sender, EventArgs e)
         {
             llenarLista();
@@ -57,44 +73,51 @@ namespace Taller_Mecanico.Formularios
             if (string.IsNullOrWhiteSpace(txtNombre.Text) ||
                 string.IsNullOrWhiteSpace(txtDescripcion.Text) ||
                 string.IsNullOrWhiteSpace(txtCosto.Text) ||
-                string.IsNullOrWhiteSpace(txtTiempoEstimado.Text))
-            {
-                MessageBox.Show("Rellene todos los datos");
-            }
+                string.IsNullOrWhiteSpace(txtTiempoEstimado.Text)
+                ) MessageBox.Show("Rellene todos los datos");
+            else if(!punto(txtCosto.Text))
+                MessageBox.Show("El costo no es válido");
             else
             {
-                servicio = new Servicio(
-                    txtNombre.Text,
-                    txtDescripcion.Text,
-                    decimal.Parse(txtCosto.Text),
-                    decimal.Parse(txtTiempoEstimado.Text)
-                );
-
-                if (registrar)
-                {
-                    if (repositorio.agregarServicio(servicio) >= 1)
-                    {
-                        MessageBox.Show("El servicio se agregó correctamente");
-                        limpiarCampos();
-                        llenarLista();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Ocurrió un error al agregar el servicio(");
-                    }
-                }
+                decimal costo = decimal.Parse(txtCosto.Text);
+                decimal tiempo = decimal.Parse(txtTiempoEstimado.Text);
+                if (costo < 1 || tiempo < 1 )
+                    MessageBox.Show("El costo y el tiempo estimado deben ser mayores a 0");
                 else
                 {
-                    servicio.idServicio = id;
-                    if (repositorio.actualizarServicio(servicio) >= 1)
+                    servicio = new Servicio(
+                    txtNombre.Text,
+                    txtDescripcion.Text,
+                    costo,
+                    tiempo
+                );
+
+                    if (registrar)
                     {
-                        MessageBox.Show("La refaccion se editó correctamente");
-                        limpiarCampos();
-                        llenarLista();
+                        if (repositorio.agregarServicio(servicio) >= 1)
+                        {
+                            MessageBox.Show("El servicio se agregó correctamente");
+                            limpiarCampos();
+                            llenarLista();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ocurrió un error al agregar el servicio(");
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Ocurrió un error al agregar la refacción");
+                        servicio.idServicio = id;
+                        if (repositorio.actualizarServicio(servicio) >= 1)
+                        {
+                            MessageBox.Show("La refaccion se editó correctamente");
+                            limpiarCampos();
+                            llenarLista();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ocurrió un error al agregar la refacción");
+                        }
                     }
                 }
             }
@@ -142,6 +165,12 @@ namespace Taller_Mecanico.Formularios
                 else
                     MessageBox.Show("Ocurrió un error al eliminar el servicio");
             }
+        }
+
+        private void txtCosto_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != '.')
+                e.Handled = true;
         }
     }
 }

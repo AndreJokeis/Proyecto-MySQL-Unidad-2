@@ -33,13 +33,26 @@ namespace Taller_Mecanico.Formularios
                 string.IsNullOrWhiteSpace(txtPrecioUnitario.Text) ||
                 string.IsNullOrWhiteSpace(txtProveedor.Text) ||
                 string.IsNullOrWhiteSpace(nudStock.Text) ||
-                string.IsNullOrWhiteSpace(nudStockMinimo.Text))
+                string.IsNullOrWhiteSpace(nudStockMinimo.Text)) 
             {
                 MessageBox.Show("Rellene todos los datos");
+            } else if (!punto(txtPrecioUnitario.Text))
+            {
+                    MessageBox.Show("Ingrese un precio válido");
             }
             else
             {
-                refaccion = new Refaccion(
+                decimal stock = nudStock.Value;
+                decimal stockMinimo = nudStockMinimo.Value;
+
+                if (stock < 1 || stockMinimo < 1)
+                    MessageBox.Show("Stock y Stock mínimo deben de ser mayores a 0");
+                else if (nudStock.Value < nudStockMinimo.Value)
+                    MessageBox.Show("El stock es menor al mínimo");
+
+                else
+                {
+                    refaccion = new Refaccion(
                     txtNombre.Text,
                     txtMarca.Text,
                     decimal.Parse(txtPrecioUnitario.Text),
@@ -48,32 +61,34 @@ namespace Taller_Mecanico.Formularios
                     txtProveedor.Text
                 );
 
-                if (registrar)
-                {
-                    if (repositorio.agregarRefaccion(refaccion) >= 1)
+                    if (registrar)
                     {
-                        MessageBox.Show("La refaccion se agregó correctamente");
+                        if (repositorio.agregarRefaccion(refaccion) >= 1)
+                        {
+                            MessageBox.Show("La refaccion se agregó correctamente");
 
-                        limpiarCampos();
-                        llenarLista();
+                            limpiarCampos();
+                            llenarLista();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ocurrió un error al agregar la refacción");
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Ocurrió un error al agregar la refacción");
-                    }
-                } else
-                {
-                    refaccion.idRefaccion = id;
-                    if (repositorio.actualizarRefaccion(refaccion) >= 1)
-                    {
-                        MessageBox.Show("La refaccion se editó correctamente");
-                        
-                        limpiarCampos();
-                        llenarLista();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Ocurrió un error al agregar la refacción");
+                        refaccion.idRefaccion = id;
+                        if (repositorio.actualizarRefaccion(refaccion) >= 1)
+                        {
+                            MessageBox.Show("La refaccion se editó correctamente");
+
+                            limpiarCampos();
+                            llenarLista();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ocurrió un error al agregar la refacción");
+                        }
                     }
                 }
             }
@@ -89,6 +104,22 @@ namespace Taller_Mecanico.Formularios
         {
             dgvLista.DataSource = null;
             dgvLista.DataSource = repositorio.ObtenerRefacciones();
+        }
+
+        private bool punto(string s)
+        {
+            int count = 0;
+
+            foreach(char c in s)
+            {
+                if(c == '.')
+                    if (count < 1)
+                        count++;
+                    else
+                        return false;
+            }
+
+            return true;
         }
 
         private void limpiarCampos()
@@ -151,6 +182,12 @@ namespace Taller_Mecanico.Formularios
                 else
                     MessageBox.Show("Ocurrió un error al eliminar la refacción");
             } 
+        }
+
+        private void txtPrecioUnitario_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if(!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != '.')
+                e.Handled = true;
         }
     }
 }
